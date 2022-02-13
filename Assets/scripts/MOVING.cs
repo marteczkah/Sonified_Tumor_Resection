@@ -10,6 +10,7 @@ public class MOVING : MonoBehaviour
     public Vector3 letter_pos;
     public float distance;
     public float time_ = 0f;
+    public int position = 0;
     Renderer rend;
 
     // Start is called before the first frame update
@@ -40,11 +41,27 @@ public class MOVING : MonoBehaviour
 
             if (Time.time - time_ >= 1.5f)
             {
+                
                 GetComponent<ChuckSubInstance>().RunCode(@"
-	        SinOsc foo => dac;
-		        300 => foo.freq;
-		        300::ms => now;
-            ");
+                    // Gain g;
+                    // g => dac;
+
+	                // SawOsc env;
+                    // 0.0 => env.width;
+                    // 1.2 => env.freq;
+                    // env => g;
+
+                    SndBuf buf;
+                    me.sourceDir() + ""/Songs_Wav/do_i_wanna_know.wav"" => string music_file;
+                    music_file => buf.read; 
+                    1.0 => buf.rate;
+                    1 => buf.pos;
+                    buf => dac;
+
+                    chout <= ""Hello World"" <= IO.newline();
+
+                    300::ms => now;
+                ");
                 time_ = Time.time;
             }
         }

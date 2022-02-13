@@ -10,6 +10,8 @@ public class MOVING : MonoBehaviour
     public Vector3 letter_pos;
     public float distance;
     public float time_ = 0f;
+    public int position = 1;
+    public int song_samples = 0; 
     Renderer rend;
 
     // Start is called before the first frame update
@@ -18,7 +20,8 @@ public class MOVING : MonoBehaviour
         rend = letter.GetComponent<Renderer>();
     }
 
-    // Update is called once per frame
+    // FixedUpdate is called every 0.2 seconds
+    // 882 samples per 0.2 seconds 
     void Update()
     {
 
@@ -30,37 +33,84 @@ public class MOVING : MonoBehaviour
 
         letter_pos = letter.position + letter.right * -letter.localScale.x / 2f;
 
+        Debug.Log(Time.deltaTime);
+
         // print(rend.bounds);
         distance = (letter.position - transform.position).magnitude;
 
-        print("d" + distance);
+        GetComponent<ChuckSubInstance>().RunCode(string.Format (@"
+            SinOsc s => dac;
+            {0}::second => now;
+        ", Time.deltaTime));
 
-        if (distance > 4.5f)
-        {
+        // GetComponent<ChuckSubInstance>().RunCode(string.Format (@"
+        //     // Gain g;
+        //     // g => dac;
+	    //     // SawOsc env;
+        //     // 0.0 => env.width;
+        //     // 1.2 => env.freq;
+        //     // env => g;
 
-            if (Time.time - time_ >= 1.5f)
-            {
-                GetComponent<ChuckSubInstance>().RunCode(@"
-	        SinOsc foo => dac;
-		        300 => foo.freq;
-		        300::ms => now;
-            ");
-                time_ = Time.time;
-            }
-        }
+        //     SndBuf buf;
+        //     me.sourceDir() + ""/Songs_Wav/do_i_wanna_know.wav"" => string music_file;               
+        //     music_file => buf.read; 
+        //     1.0 => buf.rate;
+        //     {0} => buf.pos; 
+        //     buf => dac;
 
-        else
-        {
-                if (Time.time - time_ >= 1)
-                {
-                    GetComponent<ChuckSubInstance>().RunCode(@"
-	        SinOsc foo => dac;
-		        600 => foo.freq;
-		        150::ms => now;
-            ");
-                    time_ = Time.time;
-                }
+        //     chout <= ""Hello World"" <= IO.newline();
 
+        //     20::ms => now;
+        // ", position));
+
+        // if (distance > 4.5f)
+        // {
+        //     GetComponent<ChuckSubInstance>().RunCode(string.Format (@"
+        //         // Gain g;
+        //         // g => dac;
+
+	    //         // SawOsc env;
+        //         // 0.0 => env.width;
+        //         // 1.2 => env.freq;
+        //         // env => g;
+
+        //         SndBuf buf;
+        //         me.sourceDir() + ""/Songs_Wav/do_i_wanna_know.wav"" => string music_file;
+        //         music_file => buf.read; 
+        //         1.0 => buf.rate;
+        //         {0} => buf.pos; 
+        //         buf => dac;
+
+        //         chout <= ""Hello World"" <= IO.newline();
+
+        //         20::ms => now;
+        //     ", position));
+        // }
+
+        // else
+        // {
+        //     GetComponent<ChuckSubInstance>().RunCode(string.Format (@"
+        //         // Gain g;
+        //         // g => dac;
+
+        //         // SawOsc env;
+        //         // 0.0 => env.width;
+        //         // 1.2 => env.freq;
+        //         // env => g;
+
+        //         SndBuf buf_2;
+        //         me.sourceDir() + ""/Songs_Wav/do_i_wanna_know.wav"" => string music_file;
+        //         music_file => buf_2.read; 
+        //         0.2 => buf_2.rate;
+        //         {0} => buf_2.pos; 
+        //         buf_2 => dac;
+
+        //         20::ms => now;
+        //         ", position));
+        // }
+        position += 882;
+        if (position >= 12014208) {
+            position = 1;
         }
 
     }
