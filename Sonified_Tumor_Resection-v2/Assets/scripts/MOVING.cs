@@ -20,18 +20,52 @@ public class MOVING : MonoBehaviour
 
     private bool paused1;
     private bool paused2;
+    private bool far;
+    private bool near;
 
     // Start is called before the first frame update
     void Start()
     {
         rend = letter.GetComponent<Renderer>();
         audioSource = GetComponent<AudioSource>();
+        audioSource.clip = song1;
+        audioSource.Play();
         paused1 = true;
         paused2 = true;
+        far = true;
+        near = false;
+        InvokeRepeating("ChangeFreq", 0.02f, 0.02f);
+    }
+
+    void ChangeFreq()
+    {
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+
+        transform.Translate(new Vector3(horizontal, 0.0f, vertical) * Time.deltaTime * speedx);
+
+        letter_pos = letter.position + letter.right * -letter.localScale.x / 2f;
+
+        // print(rend.bounds);
+        distance = (letter.position - transform.position).magnitude;
+        
+        if (far && distance < 10.5) {
+            audioSource.pitch = 0.7f;
+            far = false;
+            near = true;
+        }
+
+        if (near && distance >= 10.5) {
+            audioSource.pitch = 1.2f;
+            near = false;
+            far = true;
+        }
+
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void SwitchTwoSongs()
     {
 
         float horizontal = Input.GetAxis("Horizontal");
