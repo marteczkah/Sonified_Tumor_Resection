@@ -85,14 +85,16 @@ public class MOVING : MonoBehaviour
         }
 
         GetComponent<ChuckSubInstance>().RunCode( string.Format ( @"
-            ModalBar viol => dac;
+            ModalBar viol => NRev a => dac;
             [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] @=> int scale[];
+            1  => a.gain;
+            0.3 => a.mix;
             Std.mtof(scale[{0}]) => viol.freq;
             6 => viol.preset;
             1 => viol.noteOn;
-            0.5 :: second => now;
+            0.3 :: second => now;
             1 => viol.noteOff;
-            0.5 :: second => now;
+            0.3 :: second => now;
         ", current_freq));
     }
 
