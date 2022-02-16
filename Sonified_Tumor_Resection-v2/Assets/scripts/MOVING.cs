@@ -50,13 +50,13 @@ public class MOVING : MonoBehaviour
         // print(rend.bounds);
         distance = (letter.position - transform.position).magnitude;
         
-        if (far && distance < 10.5) {
+        if (far && distance < 5.5) {
             audioSource.pitch = 0.7f;
             far = false;
             near = true;
         }
 
-        if (near && distance >= 10.5) {
+        if (near && distance >= 5.5) {
             audioSource.pitch = 1.2f;
             near = false;
             far = true;
@@ -81,7 +81,7 @@ public class MOVING : MonoBehaviour
 
         print("d" + distance);
 
-        if (paused2 && distance < 10.5) {
+        if (paused2 && distance < 5.5) {
             audioSource.Pause();
             audioSource.clip = song2;
             // audioSource.pitch = 0.5f;
@@ -90,7 +90,7 @@ public class MOVING : MonoBehaviour
             paused1 = true;
         }
 
-        if (paused1 && distance >= 10.5) {
+        if (paused1 && distance >= 5.5) {
             audioSource.Pause();
             audioSource.clip = song1;
             audioSource.Play();
