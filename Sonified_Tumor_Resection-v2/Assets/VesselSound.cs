@@ -8,13 +8,15 @@ public class VesselSound : MonoBehaviour
     public GameObject moving_object;
     public GameObject cube;
     private float distance;
+    private AudioSource audioSource;
     void Start()
     {
-        InvokeRepeating("Vessel", (float) 0.3, (float) 0.3);
+        InvokeRepeating("Vessel2", (float) 0.3, (float) 0.3);
     }
 
     void Update()
     {
+        audioSource = GetComponent<AudioSource>();
         distance = Vector3.Distance(moving_object.transform.position, cube.transform.position);
     }
     // Update is called once per frame
@@ -60,6 +62,43 @@ public class VesselSound : MonoBehaviour
                 3000 => filt.freq;
                 100.0 => imp.next;
                 0.1 :: second => now;
+            ");
+        }
+    }
+
+    void Vessel2() {
+        bool is_playing = false;
+        if (distance < 10 && distance > 7.5) {
+            audioSource.volume = 0.3f;
+            is_playing = true;
+        } else if (distance <=7.5 && distance > 5) {
+            audioSource.volume = 0.6f;
+            is_playing = true;
+        } else if (distance <= 5) {
+            audioSource.volume = 1.0f;
+            is_playing = true;
+        }
+        if (is_playing) {
+            GetComponent<ChuckSubInstance>().RunCode(@"
+                Noise n => LPF f => dac;
+                // set biquad pole radius
+                //.99 => f.prad;
+                // set biquad gain
+                //100 => f.freq;
+                // set equal zeros 
+                //1 => f.eqzs;
+                // our float
+                0.0 => float t;
+
+                // infinite time-loop
+                for (0 => int i; i < 3; i++)
+                {
+                    // sweep the filter resonant frequency
+                    500.0 + Std.fabs(Math.sin(t)) * 200.0 => f.freq;
+                    t + .02 => t;
+                    // advance time
+                    0.1 :: second => now;
+                }
             ");
         }
     }
