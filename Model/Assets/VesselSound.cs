@@ -40,16 +40,8 @@ public class VesselSound : MonoBehaviour
         if (is_playing) {
             GetComponent<ChuckSubInstance>().RunCode(@"
                 Noise n => LPF f => dac;
-                // set biquad pole radius
-                //.99 => f.prad;
-                // set biquad gain
-                //100 => f.freq;
-                // set equal zeros 
-                //1 => f.eqzs;
-                // our float
                 0.0 => float t;
 
-                // infinite time-loop
                 for (0 => int i; i < 3; i++)
                 {
                     // sweep the filter resonant frequency
