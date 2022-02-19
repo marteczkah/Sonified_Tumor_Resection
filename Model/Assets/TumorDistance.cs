@@ -48,7 +48,7 @@ public class TumorDistance : MonoBehaviour
             isNearRed = true;
         } else if (current_dist <= 2.025f &&  current_dist > 0.5f) { // you too close
             isInRead = true;
-        } else if (current_dist <= 0.5f && current_dist >= 0) {
+        } else if (current_dist <= 0.5f && current_dist > 0) {
             isTumor = true;
         }
         if (isNearRed) {
