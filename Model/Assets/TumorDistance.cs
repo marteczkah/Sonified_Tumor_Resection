@@ -14,7 +14,7 @@ public class TumorDistance : MonoBehaviour
     void Start()
     {
         transmitter = gameObject.AddComponent<OSCTransmitter>();
-        transmitter.RemoteHost = "127.0.0.1";    
+        transmitter.RemoteHost = "131.159.218.239";    
         transmitter.RemotePort = 7001;  
         InvokeRepeating("Chuck", (float) 0.5, (float) 0.5);
     }
