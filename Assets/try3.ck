@@ -1,25 +1,19 @@
-// OSC in
 OscIn oin;
-// see if port is supplied on command line
 if( me.args() ) me.arg(0) => Std.atoi => oin.port;
-// default port
 else 7001 => oin.port;
-// listen to everything coming
 oin.listenAll();
 
-// something to shuttle data
 OscMsg msg;
 
-// infinite time loop
 while(true)
 {
-    // wait for OSC input
     oin => now;
     
     while( oin.recv(msg) )
     {
         msg.getString(0) => string whatPlaying;
-        if (whatPlaying == "/isNearRed") 
+        <<< whatPlaying >>>;
+        if (whatPlaying == "isNearRed") 
         {
             HevyMetl hm => NRev a => dac;
             [80, 90, 100] @=> int scale[];
@@ -90,7 +84,7 @@ while(true)
             0.25 :: second => now;
             1 => viol.noteOff;
             0.25 :: second => now;
-        } else if (whatPlaying == "area100")
+        } else if (whatPlaying == "inTheArea")
         {
             ModalBar viol => NRev a => dac;
             1  => a.gain;
@@ -102,6 +96,5 @@ while(true)
             1 => viol.noteOff;
             0.25 :: second => now;
         } 
-
     }
 }

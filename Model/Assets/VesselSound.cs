@@ -11,7 +11,9 @@ public class VesselSound : MonoBehaviour
     private float distance;
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        transmitter = gameObject.AddComponent<OSCTransmitter>();
+        transmitter.RemoteHost = "131.159.205.151";    
+        transmitter.RemotePort = 8001;  
         InvokeRepeating("Vessel", (float) 0.3, (float) 0.3);
     }
 
@@ -22,36 +24,21 @@ public class VesselSound : MonoBehaviour
         print("vessel - scalpel: " + distance);
     }
 
-    // Update is called once per frame
     void Vessel()
     {
-        bool is_playing = false;
         float current_dist = distance * 100.0f;
         if (current_dist <= 1.5f && current_dist > 1.0f) {
-            audioSource.volume = 0.3f;
-            is_playing = true;
+            var message = new OSCMessage("/message/address");
+            message.AddValue(OSCValue.String("vessel3"));
+            transmitter.Send(message); 
         } else if (current_dist <=1.0f && current_dist > 0.5f) {
-            audioSource.volume = 0.6f;
-            is_playing = true;
-        } else if (current_dist <=  0.5f && current_dist > 0.0f) {
-            audioSource.volume = 1.0f;
-            is_playing = true;
+            var message = new OSCMessage("/message/address");
+            message.AddValue(OSCValue.String("vessel2"));
+            transmitter.Send(message); 
+        } else if (current_dist <=  0.5f && current_dist >= 0.0f) {
+            var message = new OSCMessage("/message/address");
+            message.AddValue(OSCValue.String("vessel1"));
+            transmitter.Send(message); 
         }
-        if (is_playing) {
-            GetComponent<ChuckSubInstance>().RunCode(@"
-                Noise n => LPF f => dac;
-                0.0 => float t;
-
-                for (0 => int i; i < 3; i++)
-                {
-                    // sweep the filter resonant frequency
-                    500.0 + Std.fabs(Math.sin(t)) * 200.0 => f.freq;
-                    t + .02 => t;
-                    // advance time
-                    0.1 :: second => now;
-                }
-            ");
-        }
-        
     }
 }
