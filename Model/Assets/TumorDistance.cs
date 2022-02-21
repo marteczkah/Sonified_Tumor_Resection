@@ -17,9 +17,9 @@ public class TumorDistance : MonoBehaviour
         transmitter.RemoteHost = "127.0.0.1";    
         transmitter.RemotePort = 7001;  
 
-        receiver = gameObject.AddComponent<OSCReceiver>(); 
-        receiver.LocalPort = 7001; 
-        receiver.Bind("/message/address", MessageReceived);     
+        // receiver = gameObject.AddComponent<OSCReceiver>(); 
+        // receiver.LocalPort = 7001; 
+        // receiver.Bind("/message/address", MessageReceived);     
 
         InvokeRepeating("Chuck", (float) 0.5, (float) 0.5);
     }
@@ -44,62 +44,62 @@ public class TumorDistance : MonoBehaviour
             current_freq = 1;
             inTheArea = true;
             // Create message
-            var message = new OSCMessage("/message/area60");
+            var message = new OSCMessage("/message/address");
             // Populate values.
-            message.AddValue(OSCValue.String("Hello, world!"));
+            message.AddValue(OSCValue.String("area60"));
             // Send message
             transmitter.Send(message); 
         } else if (current_dist <= 4.875f && current_dist > 4.250f) { //2nd outer
             current_freq = 2;
             inTheArea = true;
-            var message = new OSCMessage("/message/area70");
+            var message = new OSCMessage("/message/address");
             // Populate values.
-            message.AddValue(OSCValue.String("Hello, world!"));
+            message.AddValue(OSCValue.String("area70"));
             // Send message
             transmitter.Send(message); 
         } else if (current_dist <= 4.250f && current_dist > 3.625f) { //3rd outer
             current_freq = 3;
             inTheArea = true;
-            var message = new OSCMessage("/message/area80");
+            var message = new OSCMessage("/message/address");
             // Populate values.
-            message.AddValue(OSCValue.String("Hello, world!"));
+            message.AddValue(OSCValue.String("area80"));
             // Send message
             transmitter.Send(message); 
         } else if (current_dist <= 4.250f && current_dist > 3.625f) { //4th outer
             current_freq = 3;
             inTheArea = true;
-            var message = new OSCMessage("/message/area90");
+            var message = new OSCMessage("/message/address");
             // Populate values.
-            message.AddValue(OSCValue.String("Hello, world!"));
+            message.AddValue(OSCValue.String("area90"));
             // Send message
             transmitter.Send(message); 
         } else if (current_dist <= 3.625f && current_dist > 2.325f) { // cut here area
             current_freq = 4;
             inTheArea = true;
-            var message = new OSCMessage("/message/area100");
+            var message = new OSCMessage("/message/address");
             // Populate values.
-            message.AddValue(OSCValue.String("Hello, world!"));
+            message.AddValue(OSCValue.String("inTheArea"));
             // Send message
             transmitter.Send(message); 
         } else if (current_dist <= 2.325f && current_dist > 2.025f) { // close to the dangerous area
             isNearRed = true;
-            var message = new OSCMessage("/message/isNearRed");
+            var message = new OSCMessage("/message/address");
             // Populate values.
-            message.AddValue(OSCValue.String("Hello, world!"));
+            message.AddValue(OSCValue.String("isNearRed"));
             // Send message
             transmitter.Send(message); 
         } else if (current_dist <= 2.025f &&  current_dist > 0.5f) { // you too close
             isInRead = true;
-            var message = new OSCMessage("/message/isInRed");
+            var message = new OSCMessage("/message/address");
             // Populate values.
-            message.AddValue(OSCValue.String("Hello, world!"));
+            message.AddValue(OSCValue.String("isInRed"));
             // Send message
             transmitter.Send(message); 
         } else if (current_dist <= 0.5f && current_dist >= 0) {
             isTumor = true;
-            var message = new OSCMessage("/message/isTumor");
+            var message = new OSCMessage("/message/address");
             // Populate values.
-            message.AddValue(OSCValue.String("Hello, world!"));
+            message.AddValue(OSCValue.String("isTumor"));
             // Send message
             transmitter.Send(message); 
         }

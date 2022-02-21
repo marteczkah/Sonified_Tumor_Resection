@@ -1,20 +1,25 @@
+// OSC in
 OscIn oin;
+// see if port is supplied on command line
+if( me.args() ) me.arg(0) => Std.atoi => oin.port;
+// default port
+else 7001 => oin.port;
+// listen to everything coming
+oin.listenAll();
+
+// something to shuttle data
 OscMsg msg;
-7001 => oin.port;
 
-while (true) 
+// infinite time loop
+while(true)
 {
-    while (oin.recv(msg))
+    // wait for OSC input
+    oin => now;
+    
+    while( oin.recv(msg) )
     {
-        <<< msg.address >>>;
-        SinOsc m => SinOsc c => dac;
-            550 => c.freq;
-            500 => m.freq;
-            300 => m.gain;
-            2 => c.sync;
-            0.5 :: second => now;
-
-        if (msg.address == "/isNearRed") 
+        msg.getString(0) => string whatPlaying;
+        if (whatPlaying == "/isNearRed") 
         {
             HevyMetl hm => NRev a => dac;
             [80, 90, 100] @=> int scale[];
@@ -28,7 +33,7 @@ while (true)
                 1 => hm.noteOff;
                 0.1 :: second => now;
             }
-        } else if (msg.address == "/isInRed")
+        } else if (whatPlaying == "isInRed")
         {
             SinOsc m => SinOsc c => dac;
             550 => c.freq;
@@ -36,12 +41,12 @@ while (true)
             300 => m.gain;
             2 => c.sync;
             0.5 :: second => now;
-        } else if (msg.address == "/isTumor")
+        } else if (whatPlaying == "isTumor")
         {
             SinOsc sinO => dac;
             Std.mtof(150) => sinO.freq;
             0.5 :: second => now;
-        } else if (msg.address == "/area60")
+        } else if (whatPlaying == "area60")
         {
             ModalBar viol => NRev a => dac;
             1  => a.gain;
@@ -52,7 +57,7 @@ while (true)
             0.25 :: second => now;
             1 => viol.noteOff;
             0.25 :: second => now;
-        } else if (msg.address == "/area70")
+        } else if (whatPlaying == "area70")
         {
             ModalBar viol => NRev a => dac;
             1  => a.gain;
@@ -63,7 +68,7 @@ while (true)
             0.25 :: second => now;
             1 => viol.noteOff;
             0.25 :: second => now;
-        } else if (msg.address == "/area80")
+        } else if (whatPlaying == "area80")
         {
             ModalBar viol => NRev a => dac;
             1  => a.gain;
@@ -74,7 +79,7 @@ while (true)
             0.25 :: second => now;
             1 => viol.noteOff;
             0.25 :: second => now;
-        } else if (msg.address == "/area90")
+        } else if (whatPlaying == "area90")
         {
             ModalBar viol => NRev a => dac;
             1  => a.gain;
@@ -85,7 +90,7 @@ while (true)
             0.25 :: second => now;
             1 => viol.noteOff;
             0.25 :: second => now;
-        } else if (msg.address == "/area100")
+        } else if (whatPlaying == "area100")
         {
             ModalBar viol => NRev a => dac;
             1  => a.gain;
@@ -97,5 +102,6 @@ while (true)
             1 => viol.noteOff;
             0.25 :: second => now;
         } 
+
     }
 }
